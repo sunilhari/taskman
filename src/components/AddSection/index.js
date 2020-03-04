@@ -19,9 +19,6 @@ function AddSection() {
         aria-describedby="add-section-helper-text"
         color="brand.400"
       />
-      <FormHelperText id="add-section-helper-text" color="brand.300">
-        Use this to add new section to the board.
-      </FormHelperText>
       <Button mt={4} variantColor="teal" type="submit">
         Submit
       </Button>

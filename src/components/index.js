@@ -1,6 +1,9 @@
 import Layout from "./Layout";
 import Header from "./Header";
-import Sections from "./Sections";
+import Board from "./Board";
 import AddSection from "./AddSection";
-
-export { Layout, Header, Sections, AddSection };
+import Sections from "./Sections";
+import Section from "./Section";
+import Task from "./Task";
+import Tasks from "./Tasks";
+export { Layout, Header, Board, AddSection, Sections, Section, Task, Tasks };
