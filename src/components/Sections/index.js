@@ -11,6 +11,7 @@ function Sections() {
       payload: {
         section: {
           name: "Section",
+          color: "brand.400",
           isDisabled: false
         }
       }

@@ -2,37 +2,89 @@ import React from "react";
 import {
   Box,
   Heading,
-  Text,
   Editable,
   EditablePreview,
-  EditableInput
+  EditableInput,
+  IconButton,
+  Flex
 } from "@chakra-ui/core";
 
-function Task({ name, desc, ...rest }) {
+import { BoardContext } from "../../context";
+
+function Task({ name, id, desc, parentId, ...rest }) {
+  const [, dispatch] = BoardContext.useBoardContext();
+  const task = {
+    name,
+    desc,
+    id
+  };
+
+  const setName = name => {
+    console.log("New Name", name);
+    const payload = {
+      sectionId: parentId,
+      task: {
+        ...task,
+        name
+      }
+    };
+    console.log("Payload", payload);
+    dispatch({
+      type: BoardContext.BoardActions.UPDATE_TASK,
+      payload
+    });
+  };
+  const setDesc = desc =>
+    dispatch({
+      type: BoardContext.BoardActions.UPDATE_TASK,
+      payload: {
+        sectionId: parentId,
+        task: {
+          ...task,
+          desc
+        }
+      }
+    });
+  const closeTask = () =>
+    dispatch({
+      type: BoardContext.BoardActions.CLOSE_TASK,
+      payload: {
+        sectionId: parentId,
+        id
+      }
+    });
   return (
     <Box p={5} shadow="md" borderWidth="1px" {...rest}>
-      <Heading fontSize="md">
-        <Editable
-          defaultValue={name}
-          as="h1"
+      <Flex alignItems="center" justifyContent="space-between" as="header">
+        <Heading fontSize="md">
+          <Editable
+            defaultValue={name}
+            display="inline-block"
+            startWithEditView={true}
+            onSubmit={setName}
+          >
+            <EditablePreview p="10px" overflowWrap="break-word" />
+            <EditableInput p="10px" />
+          </Editable>
+        </Heading>
+        <IconButton
+          aria-label="Close Task"
           display="inline-block"
-          startWithEditView={true}
-        >
-          <EditablePreview p="10px" />
-          <EditableInput p="10px" />
-        </Editable>
-      </Heading>
-      <Text mt={4}>
-        <Editable defaultValue={desc} as="p" display="inline-block">
-          <EditablePreview p="10px" />
-          <EditableInput
-            p="10px"
-            width="100%"
-            as="textarea"
-            overflowWrap="break-word"
-          />
-        </Editable>
-      </Text>
+          icon="close"
+          onClick={closeTask}
+          variantColor="outline"
+          color="black"
+        />
+      </Flex>
+      <Editable defaultValue={desc} width="100%" onSubmit={setDesc}>
+        <EditablePreview p="10px" />
+        <EditableInput
+          p="10px"
+          as="textarea"
+          overflowWrap="break-word"
+          resize="horizontal"
+        />
+      </Editable>
     </Box>
   );
 }

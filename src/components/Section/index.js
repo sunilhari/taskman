@@ -5,15 +5,18 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  CloseButton,
+  Collapse,
   Flex,
   IconButton,
-  Heading
+  Heading,
+  Tooltip
 } from "@chakra-ui/core";
 
-import { Tasks } from "../../components";
+import { Tasks, ColorPicker } from "../../components";
+
 function Section({ section }) {
-  const { name, id, isDisabled, tasks = [] } = section;
+  const [open, setOpen] = React.useState(false);
+  const { name, id, isDisabled, color, tasks = [] } = section;
   const [, dispatch] = BoardContext.useBoardContext();
   const updateSectionName = name => {
     dispatch({
@@ -42,48 +45,74 @@ function Section({ section }) {
         id: id
       }
     });
+  React.useEffect(() => {
+    setOpen(true);
+  }, [tasks]);
+  const toggleSectionState = () => setOpen(!open);
+
   return (
     <Box
-      border="solid black 1px"
       mx="10px"
       my="10px"
       p="20px"
+      width={["90%", "90%", "30%", "30%"]}
       minWidth={["90%", "90%", "30%", "30%"]}
+      shadow="lg"
     >
       <Flex alignItems="center" justifyContent="space-between" as="header">
-        <IconButton
-          aria-label="Add a Task"
-          icon="add"
-          onClick={addTaskToSection}
-          variant=""
-          variantColor="brand.300"
-        />
-        <Heading as="h2" size="lg">
+        <Tooltip label="Add a Task">
+          <IconButton
+            aria-label="Add a Task"
+            icon="add"
+            onClick={addTaskToSection}
+            variantColor="brand"
+          />
+        </Tooltip>
+        <Heading as="h2" size="lg" display="inline-block">
           <Editable
             defaultValue={name}
-            as="h1"
             onSubmit={updateSectionName}
             isDisabled={isDisabled}
-            display="inline-block"
-            startWithEditView={true}
+            startWithEditView={false}
+            textAlign="center"
+            color={color}
           >
-            <EditablePreview />
+            <EditablePreview overflowWrap="break-word" />
             <EditableInput />
           </Editable>
         </Heading>
-        <IconButton
-          aria-label="delete section"
-          display="inline-block"
-          icon="delete"
-          onClick={removeSection}
-          variant=""
-          variantColor="brand.300"
-        />
+        {section.tasks.length > 0 ? (
+          <IconButton
+            aria-label={open ? "close section" : "open section"}
+            display="inline-block"
+            icon={open ? "chevron-up" : "chevron-down"}
+            onClick={toggleSectionState}
+            variantColor="brand"
+          />
+        ) : null}
       </Flex>
 
-      <main>
+      <Collapse as="main" isOpen={open}>
         <Tasks tasks={tasks} parentId={id} />
-      </main>
+      </Collapse>
+      <Flex
+        alignItems="center"
+        justifyContent="space-between"
+        as="footer"
+        alignContent="center"
+        mt="10px"
+      >
+        <ColorPicker sectionId={id} sectionColor={color} />
+        <Tooltip label="Double Click to Delete this Section">
+          <IconButton
+            aria-label="delete section"
+            display="inline-block"
+            icon="delete"
+            onDoubleClick={removeSection}
+            variantColor="brand"
+          />
+        </Tooltip>
+      </Flex>
     </Box>
   );
 }

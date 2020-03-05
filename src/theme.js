@@ -4,9 +4,8 @@ const customTheme = {
   ...theme,
   colors: {
     ...theme.colors,
-    brand: { ...theme.colors.twitter }
+    brand: { ...theme.colors.teal }
   }
 };
 
-console.log(theme);
 export { customTheme };
