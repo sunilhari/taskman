@@ -26,6 +26,7 @@ function useBoardContext() {
 
 function BoardReducer(state, action) {
   const { type, payload } = action;
+  console.log(type, payload);
   switch (type) {
     case BoardActions.ADD_SECTION: {
       const section = {
@@ -82,7 +83,6 @@ function BoardReducer(state, action) {
           return section;
         }
       });
-      console.log("Updated Sections", updatedSections, task);
       return {
         ...state,
         sections: updatedSections
@@ -92,7 +92,7 @@ function BoardReducer(state, action) {
       const [section] = state.sections.filter(
         section => section.id === payload.sectionId
       );
-      const [restOfSections = []] = state.sections.filter(
+      const restOfSections = state.sections.filter(
         section => section.id !== payload.sectionId
       );
       const updatedTasks = section.tasks.map(task => {
@@ -107,7 +107,7 @@ function BoardReducer(state, action) {
       return {
         ...state,
         sections: [
-          restOfSections,
+          ...(restOfSections ? restOfSections : []),
           {
             ...section,
             tasks: updatedTasks
@@ -120,14 +120,14 @@ function BoardReducer(state, action) {
       const [section] = state.sections.filter(
         section => section.id === sectionId
       );
-      const [restOfSections = []] = state.sections.filter(
+      const restOfSections = state.sections.filter(
         section => section.id !== sectionId
       );
       const updatedTasks = section.tasks.filter(task => task.id !== id);
       return {
         ...state,
         sections: [
-          restOfSections,
+          ...(restOfSections ? restOfSections : []),
           {
             ...section,
             tasks: updatedTasks

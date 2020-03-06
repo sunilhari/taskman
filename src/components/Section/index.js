@@ -18,6 +18,7 @@ function Section({ section }) {
   const [open, setOpen] = React.useState(false);
   const { name, id, isDisabled, color, tasks = [] } = section;
   const [, dispatch] = BoardContext.useBoardContext();
+
   const updateSectionName = name => {
     dispatch({
       type: BoardContext.BoardActions.UPDATE_SECTION,
@@ -81,7 +82,7 @@ function Section({ section }) {
             <EditableInput />
           </Editable>
         </Heading>
-        {section.tasks.length > 0 ? (
+        {tasks.length > 0 ? (
           <IconButton
             aria-label={open ? "close section" : "open section"}
             display="inline-block"

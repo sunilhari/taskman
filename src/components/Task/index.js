@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/core";
 
 import { BoardContext } from "../../context";
-
 function Task({ name, id, desc, parentId, ...rest }) {
   const [, dispatch] = BoardContext.useBoardContext();
   const task = {
@@ -20,7 +19,6 @@ function Task({ name, id, desc, parentId, ...rest }) {
   };
 
   const setName = name => {
-    console.log("New Name", name);
     const payload = {
       sectionId: parentId,
       task: {
@@ -28,7 +26,6 @@ function Task({ name, id, desc, parentId, ...rest }) {
         name
       }
     };
-    console.log("Payload", payload);
     dispatch({
       type: BoardContext.BoardActions.UPDATE_TASK,
       payload
