@@ -1,5 +1,5 @@
 # Taskman
 
-Yet another task manager
+Yet another Task Manager
 
 Pending development   😕
